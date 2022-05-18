@@ -27,7 +27,7 @@ const Coin = styled.li`
   a {
     padding: 20px;
     transition: color 0.2s ease-in;
-    display:flex;
+    display: flex;
     align-items: center;
   }
   &:hover {
@@ -92,7 +92,7 @@ const coins = [
   },
 ];
 
-interface CoinInterface {
+interface ICoinInterface {
   id: string;
   name: string;
   symbol: string;
@@ -102,8 +102,10 @@ interface CoinInterface {
   tyep: string;
 }
 
+
+
 let Coins = () => {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
+  const [coins, setCoins] = useState<ICoinInterface[]>([]);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     //즉시 함수를 실행
@@ -127,14 +129,14 @@ let Coins = () => {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={
-                {
-                  pathname: `/:${coin.id}`,
-                  state : {
-                    name : coin.name
-                  }
-                }
-              }>
+              <Link
+                to={{
+                  pathname: `/${coin.id}`,
+                  state: {
+                    name: coin.name,
+                  },
+                }}
+              >
                 <Img
                   src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
                 />
