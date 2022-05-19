@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { FetchCoins } from "../api";
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -92,7 +95,7 @@ const coins = [
   },
 ];
 
-interface ICoinInterface {
+interface ICoin {
   id: string;
   name: string;
   symbol: string;
@@ -105,29 +108,39 @@ interface ICoinInterface {
 
 
 let Coins = () => {
-  const [coins, setCoins] = useState<ICoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    //즉시 함수를 실행
-    // (()=>{})();
+  const {isLoading, data} = useQuery<ICoin[]>("allCoins", FetchCoins)
 
-    (async () => {
-      const response = await fetch("https://api.coinpaprika.com/v1/coins");
-      const json = await response.json();
-      setCoins(json.slice(0, 100));
-      setLoading(false);
-    })();
-  }, []);
+  // const [coins, setCoins] = useState<ICoinInterface[]>([]);
+  // const [loading, setLoading] = useState(true);
+  // useEffect(() => {
+  //   //즉시 함수를 실행
+  //   // (()=>{})();
+
+  //   (async () => {
+  //     const response = await fetch("https://api.coinpaprika.com/v1/coins");
+  //     const json = await response.json();
+  //     setCoins(json.slice(0, 100));
+  //     setLoading(false);
+  //   })();
+  // }, []);
+
+
+
   return (
     <Container>
+      <Helmet>
+        <title>
+          BaKhaN Bit
+        </title>
+      </Helmet>
       <Header>
-        <Title>Coin Tarders</Title>
+        <Title>Coin Realtime</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinList>
-          {coins.map((coin) => (
+          {data?.slice(0,100).map((coin) => (
             <Coin key={coin.id}>
               <Link
                 to={{
