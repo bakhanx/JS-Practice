@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled, { createGlobalStyle, keyframes } from "styled-components";
 import Circle from "./Circle";
 import Router from "./Router";
-import {ReactQueryDevtools} from 'react-query/devtools';
-
+import { ReactQueryDevtools } from "react-query/devtools";
+import { TopNav } from "./TopNav";
 
 // Global Style
 const GlobalStyle = createGlobalStyle`
@@ -74,10 +74,11 @@ function App() {
   // `;
 
   return (
+    
     <>
       <GlobalStyle />
       <Router />
-      <ReactQueryDevtools/>
+      <ReactQueryDevtools />
     </>
   );
 }

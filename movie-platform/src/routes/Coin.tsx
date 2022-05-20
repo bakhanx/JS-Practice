@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
   Link,
@@ -96,6 +96,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   }
 `;
 
+
 interface IRouteState {
   name: string;
 }
@@ -176,68 +177,82 @@ let Coin = () => {
   );
 
   const loading = infoLoading || tickerLoading;
+
   return (
-    <Container>
-      <Helmet>
-        <title>
-          {state?.name ? `${state.name} - BaKhaN Bit` : loading ? "Loading..." : `${infoData?.name} - BakhaN Bit`}
-        </title>
-      </Helmet>
-      <Header>
-        <Title>
-          {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
-        </Title>
-      </Header>
-      {loading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <>
-          <OverView>
-            <OverViewItem>
-              <span>Rank</span>
-              <span>{infoData?.rank}</span>
-            </OverViewItem>
-            <OverViewItem>
-              <span>Symbol</span>
-              <span>${infoData?.symbol}</span>
-            </OverViewItem>
-            <OverViewItem>
-              <span>Open Source</span>
-              <span>{infoData?.open_source ? "Yes" : "No"}</span>
-            </OverViewItem>
-          </OverView>
-          <Description>{infoData?.description}</Description>
-          <OverView>
-            <OverViewItem>
-              <span>Price</span>
-              <span>{ tickerData?.quotes.USD.price as Number > 10 ? tickerData?.quotes.USD.price.toFixed(2) : tickerData?.quotes.USD.price.toFixed(4)}</span>
-            </OverViewItem>
-            <OverViewItem>
-              <span>Total Supply</span>
-              <span>{tickerData?.total_supply}</span>
-            </OverViewItem>
-          </OverView>
+    <>
+     
+      <Container>
+        <Helmet>
+          <title>
+            {state?.name
+              ? `${state.name} - BaKhaN Bit`
+              : loading
+              ? "Loading..."
+              : `${infoData?.name} - BakhaN Bit`}
+          </title>
+        </Helmet>
 
-          <Tabs>
-            <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>chart</Link>
-            </Tab>
-            <Tab isActive={priceMatch !== null}>
-              <Link to={`/${coinId}/price`}>price</Link>
-            </Tab>
-          </Tabs>
+        <Header>
+          <Title>
+            {state?.name ? state.name : loading ? "Loading..." : infoData?.name}
+          </Title>
+        </Header>
 
-          <Switch>
-            <Route path={`/${coinId}/chart`}>
-              <Chart coinId={coinId} />
-            </Route>
-            <Route path={`/${coinId}/price`}>
-              <Price></Price>
-            </Route>
-          </Switch>
-        </>
-      )}
-    </Container>
+        {loading ? (
+          <Loader>Loading...</Loader>
+        ) : (
+          <>
+            <OverView>
+              <OverViewItem>
+                <span>Rank</span>
+                <span>{infoData?.rank}</span>
+              </OverViewItem>
+              <OverViewItem>
+                <span>Symbol</span>
+                <span>${infoData?.symbol}</span>
+              </OverViewItem>
+              <OverViewItem>
+                <span>Open Source</span>
+                <span>{infoData?.open_source ? "Yes" : "No"}</span>
+              </OverViewItem>
+            </OverView>
+            <Description>{infoData?.description}</Description>
+            <OverView>
+              <OverViewItem>
+                <span>Price</span>
+                <span>
+                  {(tickerData?.quotes.USD.price as Number) > 10
+                    ? tickerData?.quotes.USD.price.toFixed(2)
+                    : tickerData?.quotes.USD.price.toFixed(4)}
+                </span>
+              </OverViewItem>
+              <OverViewItem>
+                <span>Total Supply</span>
+                <span>{tickerData?.total_supply}</span>
+              </OverViewItem>
+            </OverView>
+
+            <Tabs>
+              <Tab isActive={chartMatch !== null}>
+                <Link to={`/${coinId}/chart`}>chart</Link>
+              </Tab>
+              <Tab isActive={priceMatch !== null}>
+                <Link to={`/${coinId}/price`}>price</Link>
+              </Tab>
+            </Tabs>
+
+            <Switch>
+              <Route path={`/${coinId}/chart`}>
+                <Chart coinId={coinId} />
+              </Route>
+              <Route path={`/${coinId}/price`}>
+                {/* <Price></Price> */}
+              </Route>
+            </Switch>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

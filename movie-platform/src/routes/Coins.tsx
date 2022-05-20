@@ -95,6 +95,8 @@ const coins = [
   },
 ];
 
+
+
 interface ICoin {
   id: string;
   name: string;
@@ -105,61 +107,43 @@ interface ICoin {
   tyep: string;
 }
 
-
-
 let Coins = () => {
-  const {isLoading, data} = useQuery<ICoin[]>("allCoins", FetchCoins)
-
-  // const [coins, setCoins] = useState<ICoinInterface[]>([]);
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   //즉시 함수를 실행
-  //   // (()=>{})();
-
-  //   (async () => {
-  //     const response = await fetch("https://api.coinpaprika.com/v1/coins");
-  //     const json = await response.json();
-  //     setCoins(json.slice(0, 100));
-  //     setLoading(false);
-  //   })();
-  // }, []);
-
-
+  const { isLoading, data } = useQuery<ICoin[]>("allCoins", FetchCoins);
 
   return (
-    <Container>
-      <Helmet>
-        <title>
-          BaKhaN Bit
-        </title>
-      </Helmet>
-      <Header>
-        <Title>Coin Realtime</Title>
-      </Header>
-      {isLoading ? (
-        <Loader>Loading...</Loader>
-      ) : (
-        <CoinList>
-          {data?.slice(0,100).map((coin) => (
-            <Coin key={coin.id}>
-              <Link
-                to={{
-                  pathname: `/${coin.id}`,
-                  state: {
-                    name: coin.name,
-                  },
-                }}
-              >
-                <Img
-                  src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
-                />
-                {coin.name} &rarr;
-              </Link>
-            </Coin>
-          ))}
-        </CoinList>
-      )}
-    </Container>
+    <>
+      <Container>
+        <Helmet>
+          <title>BaKhaN Bit</title>
+        </Helmet>
+        <Header>
+          <Title>Coin Realtime</Title>
+        </Header>
+        {isLoading ? (
+          <Loader>Loading...</Loader>
+        ) : (
+          <CoinList>
+            {data?.slice(0, 100).map((coin) => (
+              <Coin key={coin.id}>
+                <Link
+                  to={{
+                    pathname: `/${coin.id}`,
+                    state: {
+                      name: coin.name,
+                    },
+                  }}
+                >
+                  <Img
+                    src={`https://coinicons-api.vercel.app/api/icon/${coin.symbol.toLowerCase()}`}
+                  />
+                  {coin.name} &rarr;
+                </Link>
+              </Coin>
+            ))}
+          </CoinList>
+        )}
+      </Container>
+    </>
   );
 };
 
