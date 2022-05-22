@@ -242,11 +242,11 @@ let Coin = () => {
             </Tabs>
 
             <Switch>
-              <Route path={`/${coinId}/chart`}>
+              {/* <Route path={`/${coinId}/chart`}>
                 <Chart coinId={coinId} />
-              </Route>
+              </Route> */}
               <Route path={`/${coinId}/price`}>
-                {/* <Price></Price> */}
+                <Price coinId={coinId}></Price>
               </Route>
             </Switch>
           </>
