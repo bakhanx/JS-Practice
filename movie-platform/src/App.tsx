@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-import styled, { createGlobalStyle, keyframes } from "styled-components";
+import styled, { createGlobalStyle, keyframes, ThemeProvider } from "styled-components";
 import Circle from "./Circle";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { TopNav } from "./TopNav";
+import { darkTheme, lightTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./atoms";
+
 
 // Global Style
 const GlobalStyle = createGlobalStyle`
@@ -66,19 +70,16 @@ a{
 `;
 
 function App() {
-  // const Container = styled.div`
-  //   background-color: ${(props) => props.theme.bgColor};
-  // `;
-  // const H1 = styled.h1`
-  //   color: ${(props) => props.theme.textColor};
-  // `;
+  const isDark = useRecoilValue(isDarkAtom);
 
   return (
-    
     <>
+    <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+      
       <GlobalStyle />
       <Router />
       <ReactQueryDevtools />
+    </ThemeProvider>
     </>
   );
 }

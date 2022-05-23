@@ -1,4 +1,5 @@
 import { useQuery } from "react-query";
+import styled from "styled-components";
 import { FetchCoinTicker } from "../api";
 
 interface IPriceProps {
@@ -29,25 +30,39 @@ interface IPriceUSD {
   };
 }
 
+const PriceData = styled.div`
+  div {
+    padding: 5px 20px;
+  }
+  span{
+    font-size: small;
+    color:#c23616;
+    padding: 0px 20px;
+  }
+`;
+
 let Price = ({ coinId }: IPriceProps) => {
   const { isLoading, data } = useQuery<IPriceUSD>(["USD", coinId], () =>
     FetchCoinTicker(coinId)
   );
   return (
-      <div>
-        {isLoading ? (
-          "Price Loading..."
-        ) : (
-          <>
-            <div>ATH DATA : {data?.quotes.USD.ath_date}</div>
-            <div>ATH PRICE : {data?.quotes.USD.ath_price}</div>
-            <div>ATH DATE : {data?.quotes.USD.ath_date}</div>
-            <div>ATH MARKET CAP : {data?.quotes.USD.market_cap}</div>
-            <div>ATH PRICE : {data?.quotes.USD.price}</div>
-            <div>ATH VOLUME 24H : {data?.quotes.USD.volume_24h}</div>
-          </>
-        )}
-      </div>
+    <div>
+      {isLoading ? (
+        "Price Loading..."
+      ) : (
+        <>
+          <PriceData>
+            <div>ATH Data : {data?.quotes.USD.ath_date}</div>
+            <div>ATH Price : {data?.quotes.USD.ath_price}</div>
+            <div>ATH Date : {data?.quotes.USD.ath_date}</div>
+            <div>ATH Market Cap : {data?.quotes.USD.market_cap}</div>
+            <div>ATH Price : {data?.quotes.USD.price}</div>
+            <div>ATH Volume 24H : {data?.quotes.USD.volume_24h}</div>
+            <span>{`( *ATH : All time High )`}</span>
+          </PriceData>
+        </>
+      )}
+    </div>
   );
 };
 

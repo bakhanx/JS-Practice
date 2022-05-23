@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { isDarkAtom } from "./atoms";
+import { darkTheme } from "./theme";
 
 const NavContainer = styled.div`
   /* fonts.googleapi */
@@ -10,7 +13,6 @@ const NavContainer = styled.div`
     src: url(https://fonts.gstatic.com/s/materialsymbolsoutlined/v7/kJF1BvYX7BgnkSrUwT8OhrdQw4oELdPIeeII9v6oDMzByHX9rA6RzazHD_dY43zj-jCxv3fzvRNU22ZXGJpEpjC_1n-q_4MrImHCIJIZrDCvHOej.woff2)
       format("woff2");
   }
-
   .material-symbols-outlined {
     font-family: "Material Symbols Outlined";
     font-weight: normal;
@@ -27,10 +29,13 @@ const NavContainer = styled.div`
     /* -webkit-font-smoothing: antialiased; */
   }
 
-  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  background-color: ${(props) => props.theme.themeColor};
   width: 100vw;
   max-width: 480px;
   margin: auto;
+  left:0;
+  right:0;
   height: 50px;
   display: flex;
   align-items: center;
@@ -43,9 +48,14 @@ const Home = styled.div`
   color: orange;
 `;
 
-const Menu = styled.div``;
+const DarkMode = styled.div`
+  color: ${(props) => props.theme.darkModeColor};
+  cursor: pointer;
+`;
 
 export let TopNav = () => {
+  const [isDark, setIsDark] = useRecoilState(isDarkAtom);
+  const ToggleDarkAtom = () =>{ setIsDark((current)=>!current)}
   return (
     <>
       <head>
@@ -62,9 +72,14 @@ export let TopNav = () => {
             <span className="material-symbols-outlined">monetization_on</span>
           </Link>
         </Home>
-        <Menu>
-          <span className="material-symbols-outlined">menu</span>
-        </Menu>
+        <DarkMode>
+          <span
+            onClick={ToggleDarkAtom}
+            className="material-symbols-outlined"
+          >
+            {isDark ? "dark_mode" : "light_mode"}
+          </span>
+        </DarkMode>
       </NavContainer>
     </>
   );

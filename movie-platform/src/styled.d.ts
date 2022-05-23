@@ -6,5 +6,9 @@ declare module "styled-components" {
     textColor: string;
     bgColor: string;
     accentColor: string;
+    themeColor:string;
+    chartColor:string;
+    darkModeColor:string;
+    listBgColor:string;
   }
 }

@@ -19,7 +19,7 @@ interface IRouteParams {
 }
 
 const Container = styled.div`
-  padding: 0px 20px;
+  padding: 30px 20px;
   max-width: 480px;
   margin: auto;
 `;
@@ -27,6 +27,10 @@ const Container = styled.div`
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 48px;
+  font-weight: bold;
+  @media (max-width:800px) {
+    font-size: 36px;
+  }
 `;
 
 const Header = styled.header`
@@ -44,10 +48,10 @@ const Loader = styled.span`
 `;
 
 const OverView = styled.div`
-  background-color: black;
+  background-color: ${props => props.theme.themeColor};
   border-radius: 15px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 5px;
 `;
 const OverViewItem = styled.div`
@@ -55,18 +59,22 @@ const OverViewItem = styled.div`
   flex-direction: column;
   text-align: center;
   padding: 10px;
-
+  &:nth-child(2){
+    margin-left:30px;
+  }
   span {
-    padding: 5px;
+    padding: 5px 10px;
   }
 
   span:first-child {
     font-size: small;
+    font-weight: bold;
   }
 `;
 const Description = styled.div`
   display: flex;
   align-items: center;
+  line-height: normal;
   padding: 20px;
 `;
 
@@ -82,7 +90,7 @@ const Tab = styled.span<{ isActive: boolean }>`
   text-transform: uppercase;
   font-weight: 700;
   font-size: 16px;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${props=>props.theme.themeColor};
   border-radius: 20px;
   padding: 7px 0px;
   color: ${(props) =>
@@ -95,7 +103,6 @@ const Tab = styled.span<{ isActive: boolean }>`
     color: tomato;
   }
 `;
-
 
 interface IRouteState {
   name: string;
@@ -180,7 +187,6 @@ let Coin = () => {
 
   return (
     <>
-     
       <Container>
         <Helmet>
           <title>
@@ -216,7 +222,9 @@ let Coin = () => {
                 <span>{infoData?.open_source ? "Yes" : "No"}</span>
               </OverViewItem>
             </OverView>
+
             <Description>{infoData?.description}</Description>
+
             <OverView>
               <OverViewItem>
                 <span>Price</span>
@@ -242,13 +250,14 @@ let Coin = () => {
             </Tabs>
 
             <Switch>
-              {/* <Route path={`/${coinId}/chart`}>
+              <Route path={`/${coinId}/chart`}>
                 <Chart coinId={coinId} />
-              </Route> */}
+              </Route>
               <Route path={`/${coinId}/price`}>
                 <Price coinId={coinId}></Price>
               </Route>
             </Switch>
+
           </>
         )}
       </Container>

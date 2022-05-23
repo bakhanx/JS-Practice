@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { FetchCoins } from "../api";
 
 const Container = styled.div`
-  padding: 0px 20px;
+  padding: 30px 20px;
   max-width: 480px;
   margin: auto;
 `;
@@ -22,8 +22,9 @@ const Header = styled.header`
 const CoinList = styled.ul``;
 
 const Coin = styled.li`
-  background-color: white;
-  color: ${(props) => props.theme.bgColor};
+  background-color: ${props=>props.theme.listBgColor};
+  color: ${(props) => props.theme.textColor};
+  border: 1px solid white;
   border-radius: 15px;
   margin-bottom: 10px;
   font-weight: bold;
@@ -43,6 +44,10 @@ const Coin = styled.li`
 const Title = styled.h1`
   color: ${(props) => props.theme.accentColor};
   font-size: 48px;
+  font-weight:bold;
+  @media (max-width:800px){
+    font-size:32px;
+  }
 `;
 
 const Loader = styled.span`
