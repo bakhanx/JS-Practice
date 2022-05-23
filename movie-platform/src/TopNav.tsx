@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { isDarkAtom } from "./atoms";
-import { darkTheme } from "./theme";
 
 const NavContainer = styled.div`
   /* fonts.googleapi */

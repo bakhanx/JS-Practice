@@ -1,9 +1,6 @@
-import React, { useState } from "react";
-import styled, { createGlobalStyle, keyframes, ThemeProvider } from "styled-components";
-import Circle from "./Circle";
+import { createGlobalStyle, ThemeProvider } from "styled-components";
 import Router from "./Router";
 import { ReactQueryDevtools } from "react-query/devtools";
-import { TopNav } from "./TopNav";
 import { darkTheme, lightTheme } from "./theme";
 import { useRecoilValue } from "recoil";
 import { isDarkAtom } from "./atoms";

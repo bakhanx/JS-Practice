@@ -1,4 +1,3 @@
-import { lazy, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import {
   Link,
