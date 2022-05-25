@@ -22,37 +22,93 @@ const ToDoList = () => {
   //     const {currentTarget : {value}} = event;
   //     setaa(value);
   //   }
-  const { register, handleSubmit, formState } = useForm();
-  const onValid = (data: any) => {
-    console.log(data);
+
+  interface IForm {
+    email: string;
+    firstName?: string; // not required
+    lastName: string;
+    password: string;
+    password2: string;
+    extraError?: string;
+  }
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setError,
+  } = useForm<IForm>({
+    defaultValues: {
+      email: "@google.com",
+    },
+  });
+  const onValid = (data: IForm) => {
+    if (data.password !== data.password2) {
+      setError(
+        "password2",
+        { message: "Password are not the same" },
+        { shouldFocus: true }
+      );
+    }
+    setError("extraError", { message: "Server offline." });
   };
-  console.log(formState.errors);
+  console.log("error : ", errors);
 
   return (
     <div>
-      <form 
-      style={{display:"flex", flexDirection:"column"}} 
-      onSubmit={handleSubmit(onValid)}
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}
       >
         <input
-          {...register("email", { required: true, minLength: 10 })}
+          {...register("email", {
+            required: "Input your Email",
+            pattern: {
+              value:
+                /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/,
+              message: 'allowed form "ex)abcdef@google.com"',
+            },
+          })}
           placeholder="Email"
         />
+        <span>{errors?.email?.message}</span>
+        <input {...register("firstName")} placeholder="First Name" />
         <input
-          {...register("firstName", { required: "Input your first name" })}
-          placeholder="First Name"
-        />
-        <input
-          {...register("lastName", { required: true })}
+          {...register("lastName", {
+            required: "Input your last name",
+            validate: {
+              nobakhan: (value) =>
+                value.includes("bakhan") ? "can't input it" : true,
+              noManager: (value) =>
+                !value.includes("manager") || "can't input it",
+            },
+          })}
           placeholder="Last Name"
-        />
+        />{" "}
+        <span>{errors?.lastName?.message}</span>
         <input
-          {...register("password", { required: true, minLength: {
+          {...register("password", {
+            required: "input your password",
+            minLength: {
               value: 5,
-              message : "Input your password at least 5 word"
-          } })}
+              message: "Input your password at least 5 word",
+            },
+          })}
           placeholder="PassWord"
-        />
+        />{" "}
+        <span>{errors?.password?.message}</span>
+        <input
+          {...register("password2", {
+            required: "input your password2",
+            minLength: {
+              value: 5,
+              message: "Input your password at least 5 word",
+            },
+          })}
+          placeholder="PassWord"
+        />{" "}
+        <span>{errors?.password2?.message}</span>
+        <span>{errors?.extraError?.message}</span>
         <button type="submit">Add</button>
       </form>
     </div>
