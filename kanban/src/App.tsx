@@ -1,11 +1,17 @@
 import React from "react";
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { getModeForUsageLocation } from "typescript";
-import { hoursSelector, minutesState } from "./atom";
+import { hoursSelector, minutesState, toDoState } from "./atom";
+import DragabbleCard  from "./Components/DragabbleCard";
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,20 +35,22 @@ const Board = styled.div`
   padding-top: 30px;
   border-radius: 5px;
   min-height: 300px;
- 
 `;
-const Card = styled.div`
-  background-color: ${(props) => props.theme.cardColor};
-  padding: 10px;
-  margin-bottom: 5px;
-  border-radius: 5px;
-`;
-
-const toDos = ["a", "b", "c", "D", "E", "F", "H", "I", "J"];
 
 function App() {
   const [minutes, setMinutes] = useRecoilState(minutesState);
   const [hours, setHours] = useRecoilState(hoursSelector);
+  const [toDos, setToDos] = useRecoilState(toDoState);
+
+  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
+    if (!destination) return;
+    setToDos((oldToDos) => {
+      const copyToDos = [...oldToDos];
+      copyToDos.splice(source.index, 1);
+      copyToDos.splice(destination?.index, 0, draggableId);
+      return copyToDos;
+    });
+  };
 
   const onChangeMinutes = (event: React.FormEvent<HTMLInputElement>) =>
     setMinutes(+event.currentTarget.value);
@@ -50,7 +58,6 @@ function App() {
   const onChangeHours = (event: React.FormEvent<HTMLInputElement>) =>
     setHours(+event.currentTarget.value);
 
-  const onDragEnd = () => {};
   return (
     <>
       {/* DragDropContext -> Droppable -> Draggable */}
@@ -60,18 +67,8 @@ function App() {
             <Droppable droppableId="one">
               {(magic) => (
                 <Board ref={magic.innerRef} {...magic.droppableProps}>
-                  {toDos.map((toDo,index) => (
-                    <Draggable draggableId={toDo} index={index}>
-                      {(magic) => (
-                        <Card
-                          ref={magic.innerRef}
-                          {...magic.dragHandleProps}
-                          {...magic.draggableProps}
-                        >
-                          {toDo}
-                        </Card>
-                      )}
-                    </Draggable>
+                  {toDos.map((toDo, index) => (
+                    <DragabbleCard key={toDo} index={index} toDo={toDo} />
                   ))}
                   {magic.placeholder}
                 </Board>
