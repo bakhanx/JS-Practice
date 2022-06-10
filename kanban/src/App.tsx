@@ -1,21 +1,17 @@
+import { count } from "console";
 import React from "react";
 
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-} from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { replaceAt } from "react-query/types/core/utils";
 
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
-import { getModeForUsageLocation } from "typescript";
 import { hoursSelector, minutesState, toDoState } from "./atom";
-import DragabbleCard  from "./Components/DragabbleCard";
+import { Board } from "./Components/Board";
 
 const Wrapper = styled.div`
   display: flex;
-  max-width: 480px;
+  max-width: 680px;
   width: 100vw;
   height: 100vh;
   margin: 0 auto;
@@ -23,35 +19,51 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Boards = styled.div`
+interface BoardsProps {
+  count: number;
+}
+
+const Boards = styled.div<BoardsProps>`
   display: grid;
   width: 100vw;
-  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+  grid-template-columns: repeat(${(props) => props.count}, 1fr);
 `;
 
-const Board = styled.div`
-  background-color: ${(props) => props.theme.boardColor};
-  padding: 5px 10px;
-  padding-top: 30px;
-  border-radius: 5px;
-  min-height: 300px;
-`;
+
 
 function App() {
   const [minutes, setMinutes] = useRecoilState(minutesState);
   const [hours, setHours] = useRecoilState(hoursSelector);
   const [toDos, setToDos] = useRecoilState(toDoState);
 
-  const onDragEnd = ({ destination, source, draggableId }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
+    const { destination, draggableId, source } = info;
     if (!destination) return;
-    setToDos((oldToDos) => {
-      const copyToDos = [...oldToDos];
-      copyToDos.splice(source.index, 1);
-      copyToDos.splice(destination?.index, 0, draggableId);
-      return copyToDos;
-    });
+    if (destination?.droppableId === source.droppableId) {
+      setToDos((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    } else if (destination?.droppableId !== source.droppableId) {
+      setToDos((allBoards) => {
+        const sourceBoard = [...allBoards[source.droppableId]];
+        const destinationBoard = [...allBoards[destination.droppableId]];
+        sourceBoard.splice(source.index, 1);
+        destinationBoard.splice(destination.index, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId]: sourceBoard,
+          [destination.droppableId]: destinationBoard,
+        };
+      });
+    }
   };
-
   const onChangeMinutes = (event: React.FormEvent<HTMLInputElement>) =>
     setMinutes(+event.currentTarget.value);
 
@@ -63,17 +75,14 @@ function App() {
       {/* DragDropContext -> Droppable -> Draggable */}
       <DragDropContext onDragEnd={onDragEnd}>
         <Wrapper>
-          <Boards>
-            <Droppable droppableId="one">
-              {(magic) => (
-                <Board ref={magic.innerRef} {...magic.droppableProps}>
-                  {toDos.map((toDo, index) => (
-                    <DragabbleCard key={toDo} index={index} toDo={toDo} />
-                  ))}
-                  {magic.placeholder}
-                </Board>
-              )}
-            </Droppable>
+          <Boards count={toDoState?.key?.length}>
+            {Object.keys(toDos).map((boardId) => (
+              <Board
+                key={boardId}
+                toDos={toDos[boardId]}
+                boardId={boardId}
+              ></Board>
+            ))}
           </Boards>
         </Wrapper>
       </DragDropContext>
