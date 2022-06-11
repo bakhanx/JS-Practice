@@ -17,16 +17,21 @@ export const hoursSelector = selector<number>({
    }
 })
 
-interface toDoStateProps {
-   [key:string] : string[]
+export interface IToDo{
+   id: number,
+   text: string,
 }
 
-export const toDoState = atom<toDoStateProps>({
+interface IToDoStateProps {
+   [key:string] : IToDo[]
+}
+
+export const toDoState = atom<IToDoStateProps>({
    key:"toDo",
    default: {
-      "To Do": ["a", "b", "c"],
-      doing : ["D", "E", "F"],
-      done : ["H", "I", "J"],
-      asd : ["asd"],
+      "To Do": [],
+      Doing : [],
+      Done : [],
+      Etc : [],
    },
 })

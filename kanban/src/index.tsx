@@ -73,6 +73,7 @@ root.render(
   <RecoilRoot>
     <ThemeProvider theme={darkTheme}>
       <GlobalStyle />
+      <title>asd</title>
       <App />
     </ThemeProvider>
   </RecoilRoot>
