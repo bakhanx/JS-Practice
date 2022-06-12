@@ -49,7 +49,14 @@ interface IForm {
 }
 const Form = styled.form`
   width: 100%;
+  display: flex;
+  padding:3px;
+  justify-content: center;
   input {
+    padding: 10px;
+    border-radius: 5px;
+    border-style: solid;
+    border-color: #e4e4e4ea;
     width: 100%;
   }
 `;
@@ -59,7 +66,7 @@ export const Board = ({ toDos, boardId }: IBoardProps) => {
   const setToDoState = useSetRecoilState(toDoState);
 
   const onValid = ({ toDo }: IForm) => {
-    const newToDo= {
+    const newToDo = {
       id: Date.now(),
       text: toDo,
     };
