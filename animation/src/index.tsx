@@ -52,10 +52,8 @@ table {
 }
 body{
   font-family: 'Source Sans Pro', sans-serif;
-  /* background: linear-gradient(0deg, #9a04fa 0%, #bf1096 100%); */
   line-height: 1.2;
   background: linear-gradient(135deg, rgba(191,16,153,1), rgba(154,4,250,1));
-  
 }
 a{
   text-decoration: none;
