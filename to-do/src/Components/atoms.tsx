@@ -1,7 +1,7 @@
 import { atom, selector } from "recoil";
 
-export enum Categories{
-  "TO_DO" =  "TO_DO",
+export const enum Categories {
+  "TO_DO" = "TO_DO",
   "DOING" = "DOING",
   "DONE" = "DONE",
 }
@@ -31,3 +31,7 @@ export const toDoSelector = selector({
   },
 });
 
+export const customCategoryState = atom({
+  key:"customCategory",
+  default:[],
+})

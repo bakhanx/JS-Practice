@@ -1,5 +1,5 @@
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../Components/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { Categories, customCategoryState, IToDo, toDoState } from "../Components/atoms";
 
 const ToDo = ({ text, category, id }: IToDo) => {
   const setTodos = useSetRecoilState(toDoState);
@@ -22,6 +22,8 @@ const ToDo = ({ text, category, id }: IToDo) => {
       return newToDos;
     });
   };
+
+  const customCategory = useRecoilValue(customCategoryState);
 
   return (
     <li>
